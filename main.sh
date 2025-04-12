@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# -----------------------------------
-# | PUNISHER TOOLKIT - RAPS SOCIETY |
-# -----------------------------------
+# .---------------------------------.
+# | PUNISHER TOOLKIT - TrabbitOne   |
+# '---------------------------------'
 
 # Clear the screen
 clear
 
 # Define color codes
-declare -A colors=(
+declare -A color=(
     [red]="\e[38;5;196m"
     [green]="\e[32m"
     [yellow]="\e[1;33m"
@@ -28,21 +28,21 @@ declare -A colors=(
 
 # Display the banner
 banner() {
-    echo -e "${colors[red]}"
+    echo -e "${color[red]}"
     [[ -f ressources/banner.txt ]] && cat ressources/banner.txt
-    echo -e "${colors[reset]}"
-    echo -e "                    [ ${colors[yellow]}PUNISHER TOOLKIT${colors[reset]} ]\n"
+    echo -e "${color[reset]}"
+    echo -e "                    [ ${color[yellow]}PUNISHER TOOLKIT${color[reset]} ]\n"
 }
 
 # Display the help menu
 help_menu() {
-    echo -e "${colors[yellow]}Commands & Usage:${colors[reset]}"
+    echo -e "${color[yellow]}Commands & Usage:${color[reset]}"
     echo -e "--------------------"
-    echo -e " ${colors[green]}help${colors[reset]}      - Show this menu"
-    echo -e " ${colors[green]}ls${colors[reset]}        - List files & directories"
-    echo -e " ${colors[green]}clear${colors[reset]}     - Clear the screen"
-    echo -e " ${colors[green]}use [tool_name]${colors[reset]} - Use a tool"
-    echo -e " ${colors[green]}exit${colors[reset]}      - Exit the toolkit"
+    echo -e " ${color[green]}help${color[reset]}      - Show this menu"
+    echo -e " ${color[green]}ls${color[reset]}        - List files & directories"
+    echo -e " ${color[green]}clear${color[reset]}     - Clear the screen"
+    echo -e " ${color[green]}use [tool_name]${color[reset]} - Use a tool"
+    echo -e " ${color[green]}exit${color[reset]}      - Exit the toolkit"
     echo -e "--------------------"
 }
 
@@ -55,16 +55,16 @@ use_tool() {
         if [[ -f "$tool_dir/base.sh" ]]; then
             clear
             banner
-            echo -e "${colors[cyan]}Using tool: ${tool}${colors[reset]}"
+            echo -e "${color[cyan]}Using tool: ${tool}${color[reset]}"
             bash "$tool_dir/base.sh"
             read -p "Press [ENTER] to continue..."
             clear
             banner
         else
-            echo -e "${colors[red]}Error: base.sh not found in $tool_dir!${colors[reset]}"
+            echo -e "${color[red]}Error: base.sh not found in $tool_dir!${color[reset]}"
         fi
     else
-        echo -e "${colors[red]}Error: Tool '$tool' does not exist!${colors[reset]}"
+        echo -e "${color[red]}Error: Tool '$tool' does not exist!${color[reset]}"
     fi
 }
 
@@ -74,26 +74,32 @@ main() {
     banner
     while true; do
         time_stamp=$(date +"%Y-%m-%d %H:%M:%S")
-        echo -e "[${colors[green]}$time_stamp${colors[reset]}]"
+        echo -e "[${color[green]}$time_stamp${color[reset]}]"
         read -rp ">>> " command
 
         case "$command" in
             ls) ls ;;
             help) help_menu ;;
             clear) clear; banner ;;
-            use\ *) 
+            use\ *)
                 tool_name="${command#use }"
                 use_tool "$tool_name"
+                echo
                 ;;
             exit)
-                echo -e "${colors[yellow]}Exiting...${colors[reset]}"
+                echo -e "${color[yellow]}Exiting...${color[reset]}"
                 break
+                ;;
+            modules)
+                echo
+                ls -1 modules/ | sed 's/^/ -> /'
+                echo
                 ;;
             "")
                 continue
                 ;;
             *)
-                echo -e "${colors[red]}Invalid command! Type 'help' for usage.${colors[reset]}"
+                echo -e "${color[red]}Invalid command! Type 'help' for usage.${color[reset]}"
                 ;;
         esac
     done
